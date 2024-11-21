@@ -1,5 +1,5 @@
 <script setup>
-import AppCard from './AppCard.vue'
+import CardItem from './CardItem.vue'
 
 const item = {
   title: 'Ride 17',
@@ -12,7 +12,7 @@ const item = {
 
 <template>
   <div class="grid grid-cols-4 gap-5">
-    <AppCard
+    <CardItem
       :title="item.title"
       :imageUrl="item.imageUrl"
       :price="item.price"
