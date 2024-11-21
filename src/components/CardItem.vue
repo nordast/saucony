@@ -5,6 +5,7 @@ const props = defineProps({
   id: Number,
   title: String,
   imageUrl: String,
+  imageUrlHover: String,
   price: Number,
   isAdded: Boolean,
 })
@@ -12,6 +13,7 @@ const props = defineProps({
 const storageName = 'saucony-favorites'
 
 const isFavorite = ref(false)
+const imageSrc = ref(props.imageUrl)
 
 onMounted(() => {
   const favorites = JSON.parse(localStorage.getItem(storageName)) || []
@@ -41,26 +43,28 @@ function remove() {
 
 <template>
   <div
+    @mouseenter="imageSrc = props.imageUrlHover"
+    @mouseleave="imageSrc = props.imageUrl"
     class="relative bg-white border border-slate-100 rounded-3xl p-8 cursor-pointer transition hover:shadow-md"
   >
     <img
       @click="isFavorite ? remove() : add()"
       :src="!isFavorite ? '/like-1.svg' : '/like-2.svg'"
-      alt="Like 1"
+      alt="Wishlist"
+      title="Wishlist"
       class="absolute top-8 left-8"
     />
 
-    <img :src="imageUrl" :alt="title" />
+    <img :src="imageSrc" :alt="title" />
 
-    <p class="mt-2">{{ title }}</p>
+    <p class="mt-2 text-lg text-semibold">{{ title }}</p>
 
-    <div class="flex justify-between mt-5">
+    <div class="flex justify-between items-center mt-2">
       <div class="flex flex-col">
-        <span class="text-slate-400">Цена:</span>
-        <b>${{ price }}</b>
+        <span class="text-slate-400">${{ price }}.00</span>
       </div>
 
-      <img :src="!isAdded ? '/plus.svg' : '/checked.svg'" alt="Plus" />
+      <img :src="!isAdded ? '/plus.svg' : '/checked.svg'" alt="Add to Cart" title="Add to Cart" />
     </div>
   </div>
 </template>

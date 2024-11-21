@@ -14,6 +14,7 @@ defineProps({
       :id="item.id"
       :title="item.title"
       :imageUrl="item.imageUrl"
+      :imageUrlHover="item.imageUrlHover"
       :price="item.price"
     />
   </div>
