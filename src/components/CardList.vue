@@ -1,23 +1,20 @@
 <script setup>
 import CardItem from './CardItem.vue'
 
-const item = {
-  title: 'Ride 17',
-  imageUrl: '/images/shoes-1.jpg',
-  price: 1200,
-  isFavorite: false,
-  isAdded: false,
-}
+defineProps({
+  items: Array,
+})
 </script>
 
 <template>
   <div class="grid grid-cols-4 gap-5">
     <CardItem
+      v-for="item in items"
+      :key="item.id"
+      :id="item.id"
       :title="item.title"
       :imageUrl="item.imageUrl"
       :price="item.price"
-      :isFavorite="item.isFavorite"
-      :isAdded="item.isAdded"
     />
   </div>
 </template>
