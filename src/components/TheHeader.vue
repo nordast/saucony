@@ -5,17 +5,17 @@
     </div>
 
     <ul class="flex items-center gap-10">
-      <li class="flex items-center gap-3 cursor-pointer">
+      <li class="flex items-center cursor-pointer gap-3 text-gray-500 hover:text-black">
         <img src="/cart.svg" alt="Cart" />
-        <span class="text-gray-500 hover:text-black transition-colors">$0.00</span>
+        <span>$0.00</span>
       </li>
-      <li class="flex items-center gap-3 cursor-pointer">
+      <li class="flex items-center cursor-pointer gap-3 text-gray-500 hover:text-black">
         <img src="/heart.svg" alt="Favorite" />
-        <span class="text-gray-500 hover:text-black transition-colors">Favorite</span>
+        <span>Favorite</span>
       </li>
-      <li class="flex items-center gap-3 cursor-pointer">
+      <li class="flex items-center cursor-pointer gap-3 text-gray-500 hover:text-black">
         <img src="/profile.svg" alt="Profile" />
-        <span class="text-gray-500 hover:text-black transition-colors">Profile</span>
+        <span>Profile</span>
       </li>
     </ul>
   </header>
