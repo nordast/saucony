@@ -22,15 +22,19 @@ defineProps({
   </div>
 
   <header class="flex justify-between border-b border-slate-200 px-10 py-5">
-    <div class="flex items-center gap-4">
-      <img src="/logo.svg" alt="Logo" class="w-40" />
-    </div>
+    <router-link to="/">
+      <div class="flex items-center gap-4">
+        <img src="/logo.svg" alt="Logo" class="w-40" />
+      </div>
+    </router-link>
 
     <ul class="flex items-center gap-10">
-      <li class="flex items-center cursor-pointer gap-3 text-gray-500 hover:text-black">
-        <img src="/heart.svg" alt="Favorite" />
-        <span>Wishlist</span>
-      </li>
+      <router-link to="/favorites">
+        <li class="flex items-center cursor-pointer gap-3 text-gray-500 hover:text-black">
+          <img src="/heart.svg" alt="Favorite" />
+          <span>Wishlist</span>
+        </li>
+      </router-link>
 
       <li
         @click="() => emit('openDrawer')"
