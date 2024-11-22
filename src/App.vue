@@ -4,6 +4,7 @@ import CardList from '@/components/CardList.vue'
 import TheDrawer from '@/components/TheDrawer.vue'
 import { onMounted, reactive, ref, watch } from 'vue'
 import axios from 'axios'
+import TheFooter from '@/components/TheFooter.vue'
 
 const items = ref([])
 
@@ -54,14 +55,6 @@ watch(filter, fetchItems)
 
   <TheHeader />
 
-  <div class="bg-slate-100 border-b border-slate-200 p-10 text-center space-y-8">
-    <h1 class="text-5xl font-mono font-black italic">'Tis the Season</h1>
-    <p class="text-2xl">
-      For you and your crew, here's to checking <br />
-      everyone (including yourself) off the list.
-    </p>
-  </div>
-
   <div class="p-10">
     <div class="flex justify-between items-center">
       <h2 class="text-3xl font-bold mb-8">Top Running Shoes</h2>
@@ -91,6 +84,8 @@ watch(filter, fetchItems)
       <CardList :items="items" />
     </div>
   </div>
+
+  <TheFooter />
 </template>
 
 <style scoped></style>
