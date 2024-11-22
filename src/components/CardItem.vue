@@ -18,13 +18,14 @@ const imageSrc = ref(props.imageUrl)
 
 <template>
   <div
+    @click="onClickAdd ? onClickAdd() : null"
     @mouseenter="imageSrc = props.imageUrlHover"
     @mouseleave="imageSrc = props.imageUrl"
     class="relative bg-white border border-slate-100 rounded-3xl p-8 cursor-pointer transition hover:shadow-md"
   >
     <img
       v-if="onClickFavorite"
-      @click="onClickFavorite"
+      @click.stop="onClickFavorite"
       :src="!isFavorite ? '/like-1.svg' : '/like-2.svg'"
       alt="Wishlist"
       title="Wishlist"
@@ -42,7 +43,6 @@ const imageSrc = ref(props.imageUrl)
 
       <img
         v-if="onClickAdd"
-        @click="onClickAdd"
         :src="!isAdded ? '/plus.svg' : '/checked.svg'"
         alt="Add to Cart"
         title="Add to Cart"
