@@ -21,7 +21,7 @@ defineProps({
     </span>
   </div>
 
-  <header class="flex justify-between border-b border-slate-200 px-10 py-5">
+  <header class="flex justify-between border-b border-slate-200 px-10 py-10">
     <router-link to="/">
       <div class="flex items-center gap-4">
         <img src="/logo.svg" alt="Logo" class="w-40" />
@@ -52,7 +52,7 @@ defineProps({
   </header>
 
   <div
-    class="text-white bg-slate-100 bg-[url('/images/community.jpg')] bg-no-repeat bg-cover bg-center border-b border-slate-200 p-8 text-center space-y-8"
+    class="text-white bg-slate-100 bg-[url('/images/community.jpg')] bg-no-repeat bg-cover bg-center border-b border-slate-200 py-20 text-center space-y-8"
   >
     <h1 class="text-5xl font-mono font-black italic">'Tis the Season</h1>
     <p class="text-2xl font-bold">
