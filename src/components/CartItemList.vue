@@ -1,6 +1,6 @@
 <script setup>
-import CartItem from './CartItem.vue'
 import { inject } from 'vue'
+import CartItem from '@/components/CartItem.vue'
 
 const { cart, removeFromCart } = inject('cart')
 </script>
@@ -10,8 +10,6 @@ const { cart, removeFromCart } = inject('cart')
     <CartItem
       v-for="item in cart"
       :key="item.id"
-      :item="item"
-      :id="item.id"
       :title="item.title"
       :price="item.price"
       :image-url="item.imageUrl"

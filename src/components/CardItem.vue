@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 
 const props = defineProps({
   id: Number,
@@ -7,39 +7,13 @@ const props = defineProps({
   imageUrl: String,
   imageUrlHover: String,
   price: Number,
+  isFavorite: Boolean,
   isAdded: Boolean,
+  onClickFavorite: Function,
   onClickAdd: Function,
 })
 
-const storageName = 'saucony-favorites'
-
-const isFavorite = ref(false)
 const imageSrc = ref(props.imageUrl)
-
-onMounted(() => {
-  const favorites = JSON.parse(localStorage.getItem(storageName)) || []
-  isFavorite.value = favorites.includes(props.id)
-})
-
-function add() {
-  let favorites = JSON.parse(localStorage.getItem(storageName)) || []
-
-  if (!favorites.includes(props.id)) {
-    favorites.push(props.id)
-  }
-
-  localStorage.setItem(storageName, JSON.stringify(favorites))
-  isFavorite.value = true
-}
-
-function remove() {
-  let favorites = JSON.parse(localStorage.getItem(storageName)) || []
-
-  favorites.splice(favorites.indexOf(props.id), 1)
-  localStorage.setItem(storageName, JSON.stringify(favorites))
-
-  isFavorite.value = false
-}
 </script>
 
 <template>
@@ -49,7 +23,8 @@ function remove() {
     class="relative bg-white border border-slate-100 rounded-3xl p-8 cursor-pointer transition hover:shadow-md"
   >
     <img
-      @click="isFavorite ? remove() : add()"
+      v-if="onClickFavorite"
+      @click="onClickFavorite"
       :src="!isFavorite ? '/like-1.svg' : '/like-2.svg'"
       alt="Wishlist"
       title="Wishlist"

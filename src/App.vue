@@ -1,14 +1,12 @@
 <script setup>
+import { ref, provide, watch, computed } from 'vue'
 import TheHeader from './components/TheHeader.vue'
-import TheDrawer from '@/components/TheDrawer.vue'
-import { computed, provide, ref, watch } from 'vue'
-import axios from 'axios'
+import TheDrawer from './components/TheDrawer.vue'
 import TheFooter from '@/components/TheFooter.vue'
-import HomePage from '@/pages/HomePage.vue'
+import { LOCAL_STORAGE_KEY_PREFIX } from '@/constants.js'
 
 const cart = ref([])
 const drawerOpen = ref(false)
-const isCreatingOrder = ref(false)
 
 const totalPrice = computed(() => cart.value.reduce((acc, item) => acc + item.price, 0))
 
@@ -30,28 +28,10 @@ const removeFromCart = (item) => {
   item.isAdded = false
 }
 
-const createOrder = async () => {
-  try {
-    isCreatingOrder.value = true
-    const { data } = await axios.post(`https://04cb287a5b978723.mokky.dev/orders`, {
-      items: cart.value,
-      totalPrice: totalPrice.value,
-    })
-
-    cart.value = []
-
-    return data
-  } catch (err) {
-    console.log(err)
-  } finally {
-    isCreatingOrder.value = false
-  }
-}
-
 watch(
   cart,
   () => {
-    localStorage.setItem('saucony-cart', JSON.stringify(cart.value))
+    localStorage.setItem(LOCAL_STORAGE_KEY_PREFIX + 'cart', JSON.stringify(cart.value))
   },
   { deep: true },
 )
@@ -66,13 +46,7 @@ provide('cart', {
 </script>
 
 <template>
-  <TheDrawer
-    v-if="drawerOpen"
-    :total-price="totalPrice"
-    @create-order="createOrder"
-    :is-creating-order="isCreatingOrder"
-  />
-
+  <TheDrawer v-if="drawerOpen" :total-price="totalPrice" />
   <TheHeader @open-drawer="openDrawer" :total-price="totalPrice" />
 
   <div class="p-10">

@@ -1,21 +1,41 @@
 <script setup>
+import axios from 'axios'
+import { ref, computed, inject } from 'vue'
 import TheDrawerHead from '@/components/TheDrawerHead.vue'
-import CartItemList from '@/components/CartItemList.vue'
-import { computed, inject } from 'vue'
 import InfoBlock from '@/components/InfoBlock.vue'
+import CartItemList from '@/components/CartItemList.vue'
+import { API_STORAGE_URL } from '@/constants.js'
 
 const props = defineProps({
   totalPrice: Number,
-  isCreatingOrder: Boolean,
 })
 
-const emit = defineEmits(['createOrder'])
+const { cart, closeDrawer } = inject('cart')
 
-const buttonDisabled = computed(() => (props.isCreatingOrder ? true : !props.totalPrice))
+const isCreating = ref(false)
+const orderId = ref(null)
 
-const { closeDrawer } = inject('cart')
+const createOrder = async () => {
+  try {
+    isCreating.value = true
 
-const orderId = null
+    const { data } = await axios.post(`${API_STORAGE_URL}/orders`, {
+      items: cart.value,
+      totalPrice: props.totalPrice.value,
+    })
+
+    cart.value = []
+
+    orderId.value = data.id
+  } catch (err) {
+    console.log(err)
+  } finally {
+    isCreating.value = false
+  }
+}
+
+const cartIsEmpty = computed(() => cart.value.length === 0)
+const buttonDisabled = computed(() => isCreating.value || cartIsEmpty.value)
 </script>
 
 <template>
@@ -50,7 +70,7 @@ const orderId = null
 
         <button
           :disabled="buttonDisabled"
-          @click="() => emit('createOrder')"
+          @click="createOrder"
           class="mt-4 transition bg-lime-500 w-full rounded-xl py-3 text-white disabled:bg-slate-300 hover:bg-lime-600 active:bg-lime-700 cursor-pointer"
         >
           CHECKOUT

@@ -1,40 +1,19 @@
 <script setup>
-import CardList from '@/components/CardList.vue'
-import { inject, onMounted, reactive, ref, watch } from 'vue'
+import { reactive, watch, ref, onMounted } from 'vue'
 import axios from 'axios'
+import debounce from 'lodash.debounce'
+import { inject } from 'vue'
+import { API_STORAGE_URL, LOCAL_STORAGE_KEY_PREFIX } from '@/constants.js'
+import CardList from '@/components/CardList.vue'
 
 const { cart, addToCart, removeFromCart } = inject('cart')
 
 const items = ref([])
 
-const filter = reactive({
+const filters = reactive({
   sortBy: '',
   searchQuery: '',
 })
-
-const fetchItems = async () => {
-  try {
-    const params = {
-      sortBy: filter.sortBy,
-    }
-
-    if (filter.searchQuery) {
-      params.title = `*${filter.searchQuery}*`
-    }
-
-    const { data } = await axios.get('https://04cb287a5b978723.mokky.dev/items', {
-      params,
-    })
-
-    items.value = data.map((item) => ({
-      ...item,
-      isFavorite: false,
-      isAdded: false,
-    }))
-  } catch (error) {
-    console.log(error)
-  }
-}
 
 const onClickAddPlus = (item) => {
   if (!item.isAdded) {
@@ -44,27 +23,95 @@ const onClickAddPlus = (item) => {
   }
 }
 
-const onChangeSort = (e) => {
-  filter.sortBy = e.target.value
+const onChangeSort = (event) => {
+  filters.sortBy = event.target.value
 }
 
-const onChangeSearch = (e) => {
-  filter.searchQuery = e.target.value
+const onChangeSearchInput = debounce((event) => {
+  filters.searchQuery = event.target.value
+}, 300)
+
+const addToFavorite = async (item) => {
+  try {
+    if (!item.isFavorite) {
+      const obj = {
+        item_id: item.id,
+      }
+
+      item.isFavorite = true
+
+      const { data } = await axios.post(`${API_STORAGE_URL}/favorites`, obj)
+
+      item.favoriteId = data.id
+    } else {
+      item.isFavorite = false
+      await axios.delete(`${API_STORAGE_URL}/favorites/${item.favoriteId}`)
+      item.favoriteId = null
+    }
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+const fetchFavorites = async () => {
+  try {
+    const { data: favorites } = await axios.get(`${API_STORAGE_URL}/favorites`)
+
+    items.value = items.value.map((item) => {
+      const favorite = favorites.find((favorite) => favorite.item_id === item.id)
+
+      if (!favorite) {
+        return item
+      }
+
+      return {
+        ...item,
+        isFavorite: true,
+        favoriteId: favorite.id,
+      }
+    })
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+const fetchItems = async () => {
+  try {
+    const params = {
+      sortBy: filters.sortBy,
+    }
+
+    if (filters.searchQuery) {
+      params.title = `*${filters.searchQuery}*`
+    }
+
+    const { data } = await axios.get(`${API_STORAGE_URL}/items`, {
+      params,
+    })
+
+    items.value = data.map((obj) => ({
+      ...obj,
+      isFavorite: false,
+      favoriteId: null,
+      isAdded: false,
+    }))
+  } catch (err) {
+    console.log(err)
+  }
 }
 
 onMounted(async () => {
-  const localCart = localStorage.getItem('saucony-cart')
+  const localCart = localStorage.getItem(LOCAL_STORAGE_KEY_PREFIX + 'cart')
   cart.value = localCart ? JSON.parse(localCart) : []
 
   await fetchItems()
+  await fetchFavorites()
 
-  // items.value = items.value.map((item) => ({
-  //   ...item,
-  //   isAdded: cart.value.some((cartItem) => cartItem.id === item.id),
-  // }))
+  items.value = items.value.map((item) => ({
+    ...item,
+    isAdded: cart.value.some((cartItem) => cartItem.id === item.id),
+  }))
 })
-
-watch(filter, fetchItems)
 
 watch(cart, () => {
   items.value = items.value.map((item) => ({
@@ -72,6 +119,8 @@ watch(cart, () => {
     isAdded: false,
   }))
 })
+
+watch(filters, fetchItems)
 </script>
 
 <template>
@@ -90,7 +139,7 @@ watch(cart, () => {
       <div class="relative">
         <img class="absolute left-4 top-3" src="/search.svg" />
         <input
-          @input="onChangeSearch"
+          @input="onChangeSearchInput"
           class="border rounded-md py-2 pl-11 pr-4 outline-none focus:border-gray-400"
           type="text"
           placeholder="Search..."
@@ -100,7 +149,14 @@ watch(cart, () => {
   </div>
 
   <div class="mt-10">
-    <CardList :items="items" @add-to-cart="onClickAddPlus" />
+    <CardList
+      v-if="!!items.length"
+      :items="items"
+      @add-to-favorite="addToFavorite"
+      @add-to-cart="onClickAddPlus"
+    />
+
+    <div v-else class="my-20">No products were found</div>
   </div>
 </template>
 
