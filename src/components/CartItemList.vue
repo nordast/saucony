@@ -2,18 +2,11 @@
 import CartItem from './CartItem.vue'
 import { inject } from 'vue'
 
-const item = {
-  id: 1,
-  title: 'Ride 17',
-  imageUrl: '/images/shoes-1.jpg',
-  price: 1200,
-}
-
 const { cart, removeFromCart } = inject('cart')
 </script>
 
 <template>
-  <div class="flex flex-col flex-1 gap-4 justify-between">
+  <div class="flex flex-col flex-1 gap-4 justify-between" v-auto-animate>
     <CartItem
       v-for="item in cart"
       :key="item.id"

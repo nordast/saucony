@@ -100,10 +100,10 @@ onMounted(async () => {
 
   await fetchItems()
 
-  items.value = items.value.map((item) => ({
-    ...item,
-    isAdded: cart.value.some((cartItem) => cartItem.id === item.id),
-  }))
+  // items.value = items.value.map((item) => ({
+  //   ...item,
+  //   isAdded: cart.value.some((cartItem) => cartItem.id === item.id),
+  // }))
 })
 
 watch(filter, fetchItems)
