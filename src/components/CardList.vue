@@ -4,6 +4,8 @@ import CardItem from './CardItem.vue'
 defineProps({
   items: Array,
 })
+
+const emit = defineEmits(['addToCart'])
 </script>
 
 <template>
@@ -13,9 +15,11 @@ defineProps({
       :key="item.id"
       :id="item.id"
       :title="item.title"
-      :imageUrl="item.imageUrl"
-      :imageUrlHover="item.imageUrlHover"
+      :image-url="item.imageUrl"
+      :image-url-hover="item.imageUrlHover"
       :price="item.price"
+      :is-added="item.isAdded"
+      :on-click-add="() => emit('addToCart', item)"
     />
   </div>
 </template>

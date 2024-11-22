@@ -8,6 +8,7 @@ const props = defineProps({
   imageUrlHover: String,
   price: Number,
   isAdded: Boolean,
+  onClickAdd: Function,
 })
 
 const storageName = 'saucony-favorites'
@@ -34,9 +35,9 @@ function add() {
 function remove() {
   let favorites = JSON.parse(localStorage.getItem(storageName)) || []
 
-  const newFavorites = favorites.filter((item) => item !== props.id)
+  favorites.splice(favorites.indexOf(props.id), 1)
+  localStorage.setItem(storageName, JSON.stringify(favorites))
 
-  localStorage.setItem(storageName, JSON.stringify(newFavorites))
   isFavorite.value = false
 }
 </script>
@@ -64,7 +65,13 @@ function remove() {
         <span class="text-slate-400">${{ price }}.00</span>
       </div>
 
-      <img :src="!isAdded ? '/plus.svg' : '/checked.svg'" alt="Add to Cart" title="Add to Cart" />
+      <img
+        v-if="onClickAdd"
+        @click="onClickAdd"
+        :src="!isAdded ? '/plus.svg' : '/checked.svg'"
+        alt="Add to Cart"
+        title="Add to Cart"
+      />
     </div>
   </div>
 </template>

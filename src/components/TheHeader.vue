@@ -1,10 +1,12 @@
-<template>
-  <!--  <div-->
-  <!--    class="bg-slate-100 border-b border-slate-200 p-1 text-center capitalize italic text-xl font-black"-->
-  <!--  >-->
-  <!--    <p>Free Shipping on Orders $75+</p>-->
-  <!--  </div>-->
+<script setup>
+const emit = defineEmits(['openDrawer'])
 
+defineProps({
+  totalPrice: Number,
+})
+</script>
+
+<template>
   <div class="bg-[#ff0000] text-white border-b border-slate-200 p-1 text-center">
     <span class="capitalize italic text-xl font-black">Holiday Starts Now</span>
     <span class="font-semibold">
@@ -30,9 +32,12 @@
         <span>Wishlist</span>
       </li>
 
-      <li class="flex items-center cursor-pointer gap-3 text-gray-500 hover:text-black">
+      <li
+        @click="() => emit('openDrawer')"
+        class="flex items-center cursor-pointer gap-3 text-gray-500 hover:text-black"
+      >
         <img src="/cart.svg" alt="Cart" />
-        <span>$0.00</span>
+        <span>${{ totalPrice }}.00</span>
       </li>
 
       <!--      <li class="flex items-center cursor-pointer gap-3 text-gray-500 hover:text-black">-->
