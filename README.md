@@ -1,4 +1,4 @@
-## SauconyStore
+## Saucony Shop
 
 https://saucony.vercel.app/
 
