@@ -1,35 +1,24 @@
-# vue-shop
+## SauconyStore
 
-This template should help get you started developing with Vue 3 in Vite.
+https://saucony.vercel.app/
 
-## Recommended IDE Setup
+Shop high-performance running shoes for men and women.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## Tech Stack
 
-## Customize configuration
+- Vue 3
+- Vue Router
+- TailwindCSS
+- Axios
+- @formkit/auto-animate
+- Composition API
+- ESLint
+- Prettier
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+## Installation
 
-## Project Setup
+Install the project dependencies using npm:
 
-```sh
+```bash
 npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
 ```
